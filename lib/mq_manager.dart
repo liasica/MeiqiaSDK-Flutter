@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:flutter/services.dart';
 
 class MQManager {
@@ -22,32 +21,53 @@ class MQManager {
     _channel.invokeMethod('show');
   }
 
-  setCustomizedId({required String customizedId}) {
+  setCustomizedId(String customizedId) {
     _channel.invokeMethod('setCustomizedId', {'customizedId': customizedId});
   }
 
-  setClientInfo({required clientInfo, bool update = false}) {
+  setClientInfo({required Map<String, dynamic> clientInfo, bool update = false}) {
     _channel.invokeMethod('setClientInfo', {'clientInfo': clientInfo, 'update': update});
   }
 
-  setScheduledAgent({required agentId}) {
+  setScheduledAgent(String agentId) {
     _channel.invokeMethod('setScheduledAgent', {'agentId': agentId});
   }
 
-  setScheduledGroup({required groupId}) {
+  setScheduledGroup(String groupId) {
     _channel.invokeMethod('setScheduledGroup', {'groupId': groupId});
   }
 
-  setPreSendTextMessage({required text}) {
+  setPreSendTextMessage(String text) {
     _channel.invokeMethod('setPreSendTextMessage', {'text': text});
   }
 
-  setPreSendProductCardMessage({required productCard}) {
-    _channel.invokeMethod('setPreSendProductCardMessage', {'productCard': productCard});
+  setPreSendProductCardMessage(ProductCard productCard) {
+    _channel.invokeMethod('setPreSendProductCardMessage', {
+      'pictureUrl': productCard.pictureUrl,
+      'title': productCard.title,
+      'description': productCard.description,
+      'productUrl': productCard.productUrl,
+      'salesCount': productCard.salesCount
+    });
   }
 
-  setStyle({required style}) {
-    _channel.invokeMethod('setStyle', {'style': style});
+  setStyle(Map<String, dynamic> style) {
+    _channel.invokeMethod('setStyle', style);
   }
+}
 
+class ProductCard {
+  String pictureUrl;
+  String title;
+  String description;
+  String productUrl;
+  int salesCount;
+
+  ProductCard({
+    required this.pictureUrl,
+    required this.title,
+    required this.description,
+    required this.productUrl,
+    required this.salesCount,
+  });
 }

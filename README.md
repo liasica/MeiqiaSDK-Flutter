@@ -32,7 +32,7 @@ final clientInfo = {
     '技能1': '休刊'
 };
 MQManager.instance
-    ..setClientInfo(clientInfo, update: false) // 设置顾客信息 PS: 这个接口只会生效一次,如果需要更新顾客信息,需要设置 update = true
+    ..setClientInfo(clientInfo: clientInfo, update: false) // 设置顾客信息 PS: 这个接口只会生效一次,如果需要更新顾客信息,需要设置 update = true
     ..show();
 // PS: 如果客服在工作台更改了顾客信息，更新顾客信息覆盖之前的内容
 ```
@@ -62,13 +62,12 @@ MQManager.instance
     ..show();
     
 // productCard 构造
-final productCard = {
-    'pictureUrl': 'https://file.pisen.com.cn/QJW3C1000WEB/Product/201701/16305409655404.jpg', // 商品图片的链接
-    'title': '商品的标题',
-    'description': '商品描述的内容',
-    'productUrl': 'https://meiqia.com', // 商品链接
-    'salesCount': 50 // 销量
-};
+ProductCard productCard = ProductCard(
+        pictureUrl: "https://file.pisen.com.cn/QJW3C1000WEB/Product/201701/16305409655404.jpg",
+        title: '商品的标题',
+        description: '商品描述的内容',
+        productUrl: 'https://meiqia.com',
+        salesCount: 50);
 ```
 
 > 配置聊天页面 UI 样式
@@ -80,6 +79,8 @@ final style = {
     'enableShowClientAvatar': false', // 是否支持当前用户头像的显示
     'enableSendVoiceMessage': true, // 是否支持发送语音消息
 };
+//以上参数为可选参数
+
 MQManager.instance
     ..setStyle(style)
     ..show();
