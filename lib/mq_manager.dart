@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'dart:convert';
+
 import 'package:flutter/services.dart';
 
 class MQManager {
@@ -17,57 +19,73 @@ class MQManager {
     return errorMsg;
   }
 
-  show() {
+  show({
+    String? customizedId,
+    ClientInfo? clientInfo,
+    String? scheduledAgent,
+    String? scheduledGroup,
+    String? preSendTextMessage,
+    ProductCard? preSendProductCard,
+    Style? style,
+  }) {
+    if (customizedId != null) {
+      _channel.invokeMethod('setCustomizedId', json.encode({'customizedId': customizedId}));
+    }
+    if (clientInfo != null) {
+      _channel.invokeMethod('setClientInfo',
+          json.encode({'clientInfo': clientInfo.info, 'update': clientInfo.update}));
+    }
+    if (scheduledAgent != null) {
+      _channel.invokeMethod('setScheduledAgent', json.encode({'agentId': scheduledAgent}));
+    }
+    if (scheduledGroup != null) {
+      _channel.invokeMethod('setScheduledGroup', json.encode({'groupId': scheduledGroup}));
+    }
+    if (preSendTextMessage != null) {
+      _channel.invokeMethod('setPreSendTextMessage', json.encode({'text': preSendTextMessage}));
+    }
+    if (preSendProductCard != null) {
+      _channel.invokeMethod(
+          'setPreSendProductCardMessage', json.encode({'productCard': preSendProductCard}));
+    }
+    if (style != null) {
+      _channel.invokeMethod('setStyle', json.encode({'style': style}));
+    }
     _channel.invokeMethod('show');
-  }
-
-  setCustomizedId(String customizedId) {
-    _channel.invokeMethod('setCustomizedId', {'customizedId': customizedId});
-  }
-
-  setClientInfo({required Map<String, dynamic> clientInfo, bool update = false}) {
-    _channel.invokeMethod('setClientInfo', {'clientInfo': clientInfo, 'update': update});
-  }
-
-  setScheduledAgent(String agentId) {
-    _channel.invokeMethod('setScheduledAgent', {'agentId': agentId});
-  }
-
-  setScheduledGroup(String groupId) {
-    _channel.invokeMethod('setScheduledGroup', {'groupId': groupId});
-  }
-
-  setPreSendTextMessage(String text) {
-    _channel.invokeMethod('setPreSendTextMessage', {'text': text});
-  }
-
-  setPreSendProductCardMessage(ProductCard productCard) {
-    _channel.invokeMethod('setPreSendProductCardMessage', {
-      'pictureUrl': productCard.pictureUrl,
-      'title': productCard.title,
-      'description': productCard.description,
-      'productUrl': productCard.productUrl,
-      'salesCount': productCard.salesCount
-    });
-  }
-
-  setStyle(Map<String, dynamic> style) {
-    _channel.invokeMethod('setStyle', style);
   }
 }
 
+class ClientInfo {
+  Map<String, String> info;
+  bool update = false;
+
+  ClientInfo({required this.info, this.update = false});
+}
+
 class ProductCard {
-  String pictureUrl;
   String title;
+  String pictureUrl;
   String description;
   String productUrl;
-  int salesCount;
+  String salesCount;
 
-  ProductCard({
-    required this.pictureUrl,
-    required this.title,
-    required this.description,
-    required this.productUrl,
-    required this.salesCount,
-  });
+  ProductCard(
+      {required this.title,
+      required this.pictureUrl,
+      required this.description,
+      required this.productUrl,
+      required this.salesCount});
+}
+
+class Style {
+  String? navBarBackgroundColor;
+  String? navBarTitleTxtColor;
+  bool enableShowClientAvatar;
+  bool enableSendVoiceMessage;
+
+  Style(
+      {this.navBarBackgroundColor,
+      this.navBarTitleTxtColor,
+      this.enableShowClientAvatar = false,
+      this.enableSendVoiceMessage = true});
 }
