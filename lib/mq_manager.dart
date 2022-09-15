@@ -67,7 +67,7 @@ class ProductCard {
   String pictureUrl;
   String description;
   String productUrl;
-  String salesCount;
+  int salesCount;
 
   ProductCard(
       {required this.title,

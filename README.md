@@ -61,7 +61,7 @@ ProductCard productCard = ProductCard(
     pictureUrl: 'https://file.pisen.com.cn/QJW3C1000WEB/Product/201701/16305409655404.jpg', // 商品图片的链接
     description: '商品描述的内容',
     productUrl: 'https://meiqia.com', // 商品链接
-    salesCount: 50'); // 销量
+    salesCount: 50); // 销量
 // 预发送文字消息 
 MQManager.instance.show(preSendProductCard: productCard);
 ```
