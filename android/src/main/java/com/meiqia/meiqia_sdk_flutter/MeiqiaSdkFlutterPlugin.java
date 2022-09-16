@@ -2,6 +2,8 @@ package com.meiqia.meiqia_sdk_flutter;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -9,11 +11,13 @@ import androidx.annotation.NonNull;
 
 import com.meiqia.core.MQManager;
 import com.meiqia.core.callback.OnInitCallback;
+import com.meiqia.meiqiasdk.util.MQConfig;
 import com.meiqia.meiqiasdk.util.MQIntentBuilder;
 
 import org.json.JSONObject;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
 import io.flutter.embedding.engine.plugins.activity.ActivityAware;
@@ -34,6 +38,14 @@ public class MeiqiaSdkFlutterPlugin implements FlutterPlugin, MethodCallHandler,
     private MethodChannel channel;
     private Activity context;
 
+    private HashMap<String, String> clientInfo;
+    private boolean updateClientInfo = false;
+    private String customizedId;
+    private String agentId;
+    private String groupId;
+    private String preSendText;
+    private Bundle preSendProductCard;
+
     @Override
     public void onAttachedToEngine(@NonNull FlutterPluginBinding flutterPluginBinding) {
         channel = new MethodChannel(flutterPluginBinding.getBinaryMessenger(), "meiqia_sdk_flutter");
@@ -48,27 +60,77 @@ public class MeiqiaSdkFlutterPlugin implements FlutterPlugin, MethodCallHandler,
                 @Override
                 public void onSuccess(String s) {
                     result.success(null);
-                    Toast.makeText(context, "init success", Toast.LENGTH_SHORT).show();
                 }
 
                 @Override
                 public void onFailure(int i, String s) {
                     result.success(s);
-                    Toast.makeText(context, "init fail s = " + s, Toast.LENGTH_SHORT).show();
                 }
             });
         } else if (call.method.equals("show")) {
-            Intent intent = new MQIntentBuilder(context).build();
+            MQIntentBuilder intentBuilder = new MQIntentBuilder(context);
+            if (updateClientInfo) {
+                intentBuilder.updateClientInfo(clientInfo);
+            } else {
+                intentBuilder.setClientInfo(clientInfo);
+            }
+            if (!TextUtils.isEmpty(customizedId)) {
+                intentBuilder.setCustomizedId(customizedId);
+            }
+            intentBuilder.setScheduledAgent(agentId);
+            intentBuilder.setScheduledGroup(groupId);
+            intentBuilder.setPreSendTextMessage(preSendText);
+            intentBuilder.setPreSendProductCardMessage(preSendProductCard);
+            Intent intent = intentBuilder.build();
             context.startActivity(intent);
+            reset();
         } else if (call.method.equals("setClientInfo")) {
-            HashMap<String, Object> clientInfo = call.argument("clientInfo");
-            boolean update = call.argument("update");
-            Log.d("kkk", "update = " + update);
-        } else if (call.method.equals("getPlatformVersion")) {
-            // todo
+            clientInfo = call.argument("clientInfo");
+            updateClientInfo = Boolean.TRUE.equals(call.argument("update"));
+        } else if (call.method.equals("setCustomizedId")) {
+            customizedId = call.argument("customizedId");
+        } else if (call.method.equals("setScheduledAgent")) {
+            agentId = call.argument("agentId");
+        } else if (call.method.equals("setScheduledGroup")) {
+            groupId = call.argument("groupId");
+        } else if (call.method.equals("setPreSendTextMessage")) {
+            preSendText = call.argument("text");
+        } else if (call.method.equals("setPreSendProductCardMessage")) {
+            preSendProductCard = new Bundle();
+            preSendProductCard.putString("title", call.argument("title"));
+            preSendProductCard.putString("pic_url", call.argument("pictureUrl"));
+            preSendProductCard.putString("description", call.argument("description"));
+            preSendProductCard.putString("product_url", call.argument("productUrl"));
+            long salesCount = -1;
+            try {
+                Object salesCountObj = call.argument("salesCount");
+                if (salesCountObj != null) {
+                    salesCount = Long.parseLong(salesCountObj.toString());
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            if (salesCount > 0) {
+                preSendProductCard.putLong("sales_count", salesCount);
+            }
+        } else if (call.method.equals("setStyle")) {
+            MQConfig.ui.titleBackgroundColor = call.argument("navBarBackgroundColor");
+            MQConfig.ui.titleTextColor = call.argument("navBarTitleTxtColor");
+            MQConfig.isShowClientAvatar = Boolean.TRUE.equals(call.argument("enableShowClientAvatar"));
+            MQConfig.isVoiceSwitchOpen = Boolean.TRUE.equals(call.argument("enableSendVoiceMessage"));
         } else {
             result.notImplemented();
         }
+    }
+
+    private void reset() {
+        clientInfo = null;
+        updateClientInfo = false;
+        customizedId = null;
+        agentId = null;
+        groupId = null;
+        preSendText = null;
+        preSendProductCard = null;
     }
 
     @Override
