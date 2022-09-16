@@ -125,12 +125,12 @@ class _MyAppState extends State<MyApp> {
             SizedBox(width: 80, height: 80, child: Image.asset('assets/images/logo.png')),
             const SizedBox(height: 80),
             ElevatedButton(
-                onPressed: _initState == InitState.fail ? _initMeiqia() : null,
+                onPressed:() => _initState == InitState.fail ? _initMeiqia() : null,
                 child: Text(_initState == InitState.success
                     ? '初始化成功'
                     : (_initState == InitState.initing ? '初始化中...' : '初始化'))),
             ElevatedButton(
-              onPressed: _initState == InitState.success ? () => _defaultChat() : null,
+              onPressed: () => _initState == InitState.success ? _defaultChat() : null,
               child: const Text('咨询客服'),
             ),
           ],

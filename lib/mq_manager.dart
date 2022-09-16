@@ -29,27 +29,26 @@ class MQManager {
     Style? style,
   }) {
     if (customizedId != null) {
-      _channel.invokeMethod('setCustomizedId', json.encode({'customizedId': customizedId}));
+      _channel.invokeMethod('setCustomizedId', {'customizedId': customizedId});
     }
     if (clientInfo != null) {
-      _channel.invokeMethod('setClientInfo',
-          json.encode({'clientInfo': clientInfo.info, 'update': clientInfo.update}));
+      _channel.invokeMethod('setClientInfo', {'clientInfo': clientInfo.info, 'update': clientInfo.update});
     }
     if (scheduledAgent != null) {
-      _channel.invokeMethod('setScheduledAgent', json.encode({'agentId': scheduledAgent}));
+      _channel.invokeMethod('setScheduledAgent', {'agentId': scheduledAgent});
     }
     if (scheduledGroup != null) {
-      _channel.invokeMethod('setScheduledGroup', json.encode({'groupId': scheduledGroup}));
+      _channel.invokeMethod('setScheduledGroup', {'groupId': scheduledGroup});
     }
     if (preSendTextMessage != null) {
-      _channel.invokeMethod('setPreSendTextMessage', json.encode({'text': preSendTextMessage}));
+      _channel.invokeMethod('setPreSendTextMessage', {'text': preSendTextMessage});
     }
     if (preSendProductCard != null) {
       _channel.invokeMethod(
-          'setPreSendProductCardMessage', json.encode({'productCard': preSendProductCard}));
+          'setPreSendProductCardMessage', preSendProductCard.toMap());
     }
     if (style != null) {
-      _channel.invokeMethod('setStyle', json.encode({'style': style}));
+      _channel.invokeMethod('setStyle', style.toMap());
     }
     _channel.invokeMethod('show');
   }
@@ -75,6 +74,17 @@ class ProductCard {
       required this.description,
       required this.productUrl,
       required this.salesCount});
+
+  Map<String, dynamic> toMap() {
+    Map<String, dynamic> map = {
+      'title': title ?? "",
+      'pictureUrl': pictureUrl ?? "",
+      'description': description ?? "",
+      'productUrl': productUrl ?? "",
+      'salesCount':salesCount ?? 0
+    };
+    return map;
+  }
 }
 
 class Style {
@@ -88,4 +98,14 @@ class Style {
       this.navBarTitleTxtColor,
       this.enableShowClientAvatar = false,
       this.enableSendVoiceMessage = true});
+
+  Map<String, dynamic> toMap() {
+    Map<String, dynamic> map = {
+      'navBarBackgroundColor': navBarBackgroundColor,
+      'navBarTitleTxtColor': navBarTitleTxtColor,
+      'enableShowClientAvatar': enableShowClientAvatar,
+      'enableSendVoiceMessage': enableSendVoiceMessage,
+    };
+    return map;
+  }
 }

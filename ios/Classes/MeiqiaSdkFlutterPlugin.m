@@ -128,12 +128,11 @@ static NSString *const kSalesCount = @"salesCount";  // 销售量
  * 初始化美洽的sdk,并回调初始化结果
  */
 -(void)initMeiqiaSDKWith:(NSString *)appKey result:(FlutterResult)result {
-    __weak typeof(result) weakResult= result;
     [MQManager initWithAppkey:appKey completion:^(NSString *clientId, NSError *error) {
         if (!error) {
-            weakResult(nil);
+            result(nil);
         } else {
-            weakResult(error);
+            result(error.description);
         }
         
     }];
@@ -157,7 +156,7 @@ static NSString *const kSalesCount = @"salesCount";  // 销售量
 - (void)showMeiQiaChatView {
     UIViewController *rootController = [[UIApplication sharedApplication] keyWindow].rootViewController;
     [self.chatViewManager presentMQChatViewControllerInViewController:rootController];
-//    self.chatViewManager = nil;
+    self.chatViewManager = nil;
 }
 
 /**
