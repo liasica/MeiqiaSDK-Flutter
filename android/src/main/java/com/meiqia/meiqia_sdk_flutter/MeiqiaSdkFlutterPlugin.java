@@ -55,6 +55,9 @@ public class MeiqiaSdkFlutterPlugin implements FlutterPlugin, MethodCallHandler,
     @Override
     public void onMethodCall(@NonNull MethodCall call, @NonNull Result result) {
         if (call.method.equals("init")) {
+            Map<String, Object> sdkInfo = new HashMap<>();
+            sdkInfo.put("channel", "flutter");
+            MQManager.getInstance(context).setSDKInfo(sdkInfo);
             String appKey = call.argument("appKey");
             MQManager.init(context, appKey, new OnInitCallback() {
                 @Override

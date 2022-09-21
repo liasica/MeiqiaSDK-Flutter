@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:flutter/services.dart';
 
@@ -77,11 +76,11 @@ class ProductCard {
 
   Map<String, dynamic> toMap() {
     Map<String, dynamic> map = {
-      'title': title ?? "",
-      'pictureUrl': pictureUrl ?? "",
-      'description': description ?? "",
-      'productUrl': productUrl ?? "",
-      'salesCount':salesCount ?? 0
+      'title': title,
+      'pictureUrl': pictureUrl,
+      'description': description,
+      'productUrl': productUrl,
+      'salesCount':salesCount
     };
     return map;
   }

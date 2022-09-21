@@ -4,7 +4,10 @@
 
 ### 1.初始化
 ``` dart
-MQManager.init('appKey',onError: (error){});
+String? errorMsg = MQManager.init('开发者自己的 appKey');
+if(errorMsg != null) {
+    // success
+}
 ```
 
 ### 2.启动对话界面

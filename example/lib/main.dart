@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:meiqia_sdk_flutter/mq_manager.dart';
+import 'package:meiqia_sdk_flutter/meiqia_sdk_flutter.dart';
 
 void main() {
   runApp(const MaterialApp(
