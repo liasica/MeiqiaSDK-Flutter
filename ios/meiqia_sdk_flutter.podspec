@@ -7,8 +7,6 @@ Pod::Spec.new do |s|
   s.version          = '0.0.1'
   s.summary          = "美洽官方 SDK for iOS"
   s.description      = "美洽官方的 Flutter SDK"
-A new Flutter project.
-                       DESC
   s.homepage         = 'https://github.com/Meiqia/MeiqiaSDK-Flutter'
   s.license          = { :file => '../LICENSE' }
   s.author           = { "zhangshunxing" => "zhangshunxing@meiqia.com" }
@@ -20,6 +18,6 @@ A new Flutter project.
   s.platform = :ios, '10.0'
 
   # Flutter.framework does not contain a i386 slice.
-  s.pod_target_xcconfig = { 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64' }
-  s.user_target_xcconfig = { 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64' }
+  s.pod_target_xcconfig = { 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64 i386' }
+  s.user_target_xcconfig = { 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64 i386' }
 end
