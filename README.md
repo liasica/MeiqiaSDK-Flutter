@@ -1,5 +1,18 @@
 # meiqia_sdk_flutter
 
+[![Pub](https://img.shields.io/pub/v/meiqia_sdk_flutter.svg)](https://pub.dev/packages/meiqia_sdk_flutter)
+
+|         |            |
+|---------|------------|
+| Android | ✅         |
+| Mac     | ✅         |
+
+## 安装
+``` dart
+dependencies:
+  meiqia_sdk_flutter: ^1.0.1
+```
+
 ## 使用美洽
 
 ### 1.初始化
@@ -80,3 +93,8 @@ Style style = Style(
 );
 MQManager.instance.show(style: style);
 ```
+
+## 相关链接
+
+- [MeiqiaSDK-Android](https://github.com/Meiqia/MeiqiaSDK-Android)
+- [MeiqiaSDK-iOS](https://github.com/Meiqia/MeiqiaSDK-iOS)
