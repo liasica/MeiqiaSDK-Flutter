@@ -128,6 +128,7 @@ static NSString *const kSalesCount = @"salesCount";  // 销售量
  * 初始化美洽的sdk,并回调初始化结果
  */
 -(void)initMeiqiaSDKWith:(NSString *)appKey result:(FlutterResult)result {
+    [MQManager configSourceChannel:MQSDKSourceChannelFlutter];
     [MQManager initWithAppkey:appKey completion:^(NSString *clientId, NSError *error) {
         if (!error) {
             result(nil);
