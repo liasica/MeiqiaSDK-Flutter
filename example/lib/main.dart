@@ -15,6 +15,7 @@ class MyApp extends StatefulWidget {
 }
 
 enum InitState {
+  empty,
   initing,
   success,
   fail,
@@ -22,6 +23,7 @@ enum InitState {
 
 class _MyAppState extends State<MyApp> {
   late InitState _initState;
+  final appkey = ''; // 开发者的 appkey
 
   @override
   void initState() {
@@ -30,19 +32,23 @@ class _MyAppState extends State<MyApp> {
   }
 
   _initMeiqia() async {
-    _initState = InitState.initing;
-    String? errorMsg = await MQManager.init(appKey: "开发者的appkey");
-    setState(() {
-      if (errorMsg == null) {
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          duration: Duration(seconds: 1),
-          content: Text('初始化成功'),
-        ));
-        _initState = InitState.success;
-      } else {
-        _initState = InitState.fail;
-      }
-    });
+    if (appkey.isNotEmpty) {
+      _initState = InitState.initing;
+      String? errorMsg = await MQManager.init(appKey: appkey);
+      setState(() {
+        if (errorMsg == null) {
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            duration: Duration(seconds: 1),
+            content: Text('初始化成功'),
+          ));
+          _initState = InitState.success;
+        } else {
+          _initState = InitState.fail;
+        }
+      });
+    } else {
+      _initState = InitState.empty;
+    }
   }
 
   /// 默认界面
@@ -124,15 +130,18 @@ class _MyAppState extends State<MyApp> {
           children: [
             SizedBox(width: 80, height: 80, child: Image.asset('assets/images/logo.png')),
             const SizedBox(height: 80),
-            ElevatedButton(
-                onPressed:() => _initState == InitState.fail ? _initMeiqia() : null,
-                child: Text(_initState == InitState.success
-                    ? '初始化成功'
-                    : (_initState == InitState.initing ? '初始化中...' : '初始化'))),
-            ElevatedButton(
-              onPressed: () => _initState == InitState.success ? _defaultChat() : null,
-              child: const Text('咨询客服'),
-            ),
+            if (_initState == InitState.empty)
+              const Text('请先设置 appkey')
+            else ...[
+              if (_initState == InitState.initing) const Text('初始化中...'),
+              if (_initState == InitState.fail)
+                ElevatedButton(onPressed: () => _initMeiqia(), child: const Text('重新初始化')),
+              if (_initState == InitState.success)
+                ElevatedButton(
+                  onPressed: () => _initState == InitState.success ? _defaultChat() : null,
+                  child: const Text('咨询客服'),
+                )
+            ]
           ],
         ),
       ),
