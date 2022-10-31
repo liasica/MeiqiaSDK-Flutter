@@ -5,7 +5,7 @@
 |         |            |
 |---------|------------|
 | Android | ✅         |
-| Mac     | ✅         |
+| iOS     | ✅         |
 
 ## 安装
 ``` dart
@@ -80,6 +80,15 @@ ProductCard productCard = ProductCard(
     salesCount: 50); // 销量
 // 预发送文字消息 
 MQManager.instance.show(preSendProductCard: productCard);
+```
+
+> 设置链接点击监听
+
+``` dart
+// 开发者自己处理 url 点击，注意：设置监听回调后,将不再跳转网页.如果需要跳转,开发者需要自行处理
+MQManager.instance.show(linkTapCallback: (url) {
+  debugPrint('clicked url = $url');
+});
 ```
 
 > 配置聊天页面 UI 样式
