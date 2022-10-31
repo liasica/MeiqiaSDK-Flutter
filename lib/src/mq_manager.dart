@@ -2,10 +2,16 @@ import 'dart:async';
 
 import 'package:flutter/services.dart';
 
+typedef LinkTapCallback = void Function(String url);
+
 class MQManager {
   static final MQManager instance = MQManager._internal();
 
-  MQManager._internal();
+  LinkTapCallback? _linkTapCallback;
+
+  MQManager._internal() {
+    _channel.setMethodCallHandler((call) => _handleMethod(call));
+  }
 
   factory MQManager() {
     return instance;
@@ -18,6 +24,13 @@ class MQManager {
     return errorMsg;
   }
 
+  // 处理从原生过来的方法
+  _handleMethod(MethodCall call) {
+    if (call.method == 'onLinkClick') {
+      _linkTapCallback?.call(call.arguments['url']);
+    }
+  }
+
   show({
     String? customizedId,
     ClientInfo? clientInfo,
@@ -26,12 +39,14 @@ class MQManager {
     String? preSendTextMessage,
     ProductCard? preSendProductCard,
     Style? style,
+    LinkTapCallback? linkTapCallback,
   }) {
     if (customizedId != null) {
       _channel.invokeMethod('setCustomizedId', {'customizedId': customizedId});
     }
     if (clientInfo != null) {
-      _channel.invokeMethod('setClientInfo', {'clientInfo': clientInfo.info, 'update': clientInfo.update});
+      _channel.invokeMethod(
+          'setClientInfo', {'clientInfo': clientInfo.info, 'update': clientInfo.update});
     }
     if (scheduledAgent != null) {
       _channel.invokeMethod('setScheduledAgent', {'agentId': scheduledAgent});
@@ -43,11 +58,14 @@ class MQManager {
       _channel.invokeMethod('setPreSendTextMessage', {'text': preSendTextMessage});
     }
     if (preSendProductCard != null) {
-      _channel.invokeMethod(
-          'setPreSendProductCardMessage', preSendProductCard.toMap());
+      _channel.invokeMethod('setPreSendProductCardMessage', preSendProductCard.toMap());
     }
     if (style != null) {
       _channel.invokeMethod('setStyle', style.toMap());
+    }
+    if (linkTapCallback != null) {
+      _linkTapCallback = linkTapCallback;
+      _channel.invokeMethod('setOnLinkClickListener');
     }
     _channel.invokeMethod('show');
   }
@@ -80,7 +98,7 @@ class ProductCard {
       'pictureUrl': pictureUrl,
       'description': description,
       'productUrl': productUrl,
-      'salesCount':salesCount
+      'salesCount': salesCount
     };
     return map;
   }

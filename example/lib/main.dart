@@ -118,6 +118,13 @@ class _MyAppState extends State<MyApp> {
     MQManager.instance.show(style: style);
   }
 
+  /// 开发者自己处理 url 点击，注意：设置监听回调后,将不再跳转网页.如果需要跳转,开发者需要自行处理
+  _setLinkTapCallback() {
+    MQManager.instance.show(linkTapCallback: (url) {
+      debugPrint('clicked url = $url');
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

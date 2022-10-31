@@ -11,6 +11,8 @@ import androidx.annotation.NonNull;
 
 import com.meiqia.core.MQManager;
 import com.meiqia.core.callback.OnInitCallback;
+import com.meiqia.meiqiasdk.activity.MQConversationActivity;
+import com.meiqia.meiqiasdk.callback.OnLinkClickCallback;
 import com.meiqia.meiqiasdk.util.MQConfig;
 import com.meiqia.meiqiasdk.util.MQIntentBuilder;
 
@@ -121,6 +123,12 @@ public class MeiqiaSdkFlutterPlugin implements FlutterPlugin, MethodCallHandler,
             MQConfig.ui.titleTextColor = call.argument("navBarTitleTxtColor");
             MQConfig.isShowClientAvatar = Boolean.TRUE.equals(call.argument("enableShowClientAvatar"));
             MQConfig.isVoiceSwitchOpen = Boolean.TRUE.equals(call.argument("enableSendVoiceMessage"));
+        } else if (call.method.equals("setOnLinkClickListener")) {
+            MQConfig.setOnLinkClickCallback((conversationActivity, intent, url) -> {
+                Map<String, String> params = new HashMap<>();
+                params.put("url", url);
+                channel.invokeMethod("onLinkClick", params);
+            });
         } else {
             result.notImplemented();
         }
