@@ -85,6 +85,7 @@ MQManager.instance.show(preSendProductCard: productCard);
 > 设置链接点击监听
 
 ``` dart
+// ios 目前只支持商品卡片的点击回调
 // 开发者自己处理 url 点击，注意：设置监听回调后,将不再跳转网页.如果需要跳转,开发者需要自行处理
 MQManager.instance.show(linkTapCallback: (url) {
   debugPrint('clicked url = $url');

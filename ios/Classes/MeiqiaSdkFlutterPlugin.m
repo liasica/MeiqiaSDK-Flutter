@@ -12,7 +12,12 @@ static NSString *const setScheduledGroupId = @"setScheduledGroup";  //设置分�
 static NSString *const setLoginCustomizedId = @"setCustomizedId";  //设置登录客服的开发者自定义id
 static NSString *const setPreSendTextMessage = @"setPreSendTextMessage";  //设置预发送的文本信息
 static NSString *const setPreSendProductCardMessage = @"setPreSendProductCardMessage";  //设置预发送的商品卡片信息
+static NSString *const setOnLinkClickListener = @"setOnLinkClickListener";  //点击商品卡片的回调
 static NSString *const showChatViewController = @"show";  //跳转到聊天页面
+
+#pragma mark - 回调给flutter的方法
+
+static NSString *const onLinkClick = @"onLinkClick";  //点击商品卡片的回调
 
 #pragma mark - 所有arguments的参数key
 
@@ -25,6 +30,7 @@ static NSString *const kProductCard = @"productCard";  //预发送的商品卡�
 static NSString *const kStyle = @"style";  //UI样式的配置
 static NSString *const kClientInfo = @"clientInfo";  //顾客的自定义信息
 static NSString *const kUpdate = @"update";  // 是否强制更新
+static NSString *const kUrl = @"url";  // 点击商品卡片的链接
 
 #pragma mark - UI配置的参数key
 
@@ -65,7 +71,7 @@ static NSString *const kSalesCount = @"salesCount";  // 销售量
     FlutterMethodChannel* channel = [FlutterMethodChannel
         methodChannelWithName:@"meiqia_sdk_flutter"
               binaryMessenger:[registrar messenger]];
-    MeiqiaSdkFlutterPlugin* instance = [[MeiqiaSdkFlutterPlugin alloc] init];
+    MeiqiaSdkFlutterPlugin* instance = [[MeiqiaSdkFlutterPlugin alloc] initWithChannel:channel];
     [registrar addMethodCallDelegate:instance channel:channel];
     [registrar addApplicationDelegate:instance];
 }
@@ -114,6 +120,8 @@ static NSString *const kSalesCount = @"salesCount";  // 销售量
         }
     } else if ([method isEqualToString:setPreSendProductCardMessage]) {
         [self setPreSendProductCardMessage:argument];
+    } else if ([method isEqualToString:setOnLinkClickListener]) {
+        [self handleSetOnLinkClickListener];
     } else if ([method isEqualToString:showChatViewController]) {
         [self showMeiQiaChatView];
     } else {
@@ -307,6 +315,17 @@ static NSString *const kSalesCount = @"salesCount";  // 销售量
     
     MQProductCardMessage *productCard = [[MQProductCardMessage alloc] initWithPictureUrl:pictureUrl title:title description:desc productUrl:productUrl andSalesCount:salesCount];
     [self.chatViewManager setPreSendMessages: @[productCard]];
+}
+
+/**
+ *
+ * 设置商品卡片的点击回调
+ */
+-(void)handleSetOnLinkClickListener {
+    __weak typeof(self) weakSelf = self;
+    [self.chatViewManager didTapProductCard:^(NSString *productUrl) {
+        [weakSelf.channel invokeMethod:onLinkClick arguments:@{kUrl: productUrl}];
+    }];
 }
 
 #pragma mark - AppDelegate
