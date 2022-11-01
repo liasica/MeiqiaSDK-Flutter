@@ -10,15 +10,15 @@
 ## 安装
 ``` dart
 dependencies:
-  meiqia_sdk_flutter: ^1.0.1
+  meiqia_sdk_flutter: ^1.0.2
 ```
 
 ## 使用美洽
 
 ### 1.初始化
 ``` dart
-String? errorMsg = MQManager.init('开发者自己的 appKey');
-if(errorMsg != null) {
+String? errorMsg = await MQManager.init(appKey: '开发者自己的 appKey');
+if(errorMsg == null) {
     // success
 }
 ```

@@ -1,3 +1,3 @@
-## 0.0.1
-
-* TODO: Describe initial release.
+Version 1.0.2 *(2022-11-01)*
+----------------------------
+- 新增 linkTapCallback 接口，可以监听聊天中的链接点击（iOS 暂时只支持监听商品卡片点击）
