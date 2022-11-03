@@ -10,7 +10,7 @@
 ## 安装
 ``` dart
 dependencies:
-  meiqia_sdk_flutter: ^1.0.2
+  meiqia_sdk_flutter: ^1.0.3
 ```
 
 ## 使用美洽
@@ -102,6 +102,12 @@ Style style = Style(
     enableSendVoiceMessage: true, // 是否支持发送语音消息
 );
 MQManager.instance.show(style: style);
+```
+
+> 关闭聊天页面
+
+``` dart
+MQManager.instance.dismiss();
 ```
 
 ## 相关链接
