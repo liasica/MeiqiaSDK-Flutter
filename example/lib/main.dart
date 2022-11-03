@@ -104,7 +104,16 @@ class _MyAppState extends State<MyApp> {
         // 商品链接
         salesCount: 50); // 销量
     // 预发送文字消息
-    MQManager.instance.show(preSendProductCard: productCard);
+    MQManager.instance.show(
+        preSendProductCard: productCard,
+        // 监听商品卡片点击
+        linkTapCallback: (url) {
+          debugPrint('点击了商品卡片的链接: $url');
+          // 跳转到 flutter 的指定页面
+          Navigator.push(context, MaterialPageRoute(builder: (context) => const SecondPage()));
+          // 关闭对话页
+          MQManager.instance.dismiss();
+        });
   }
 
   /// 配置聊天页面 UI 样式
@@ -150,6 +159,25 @@ class _MyAppState extends State<MyApp> {
                 )
             ]
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class SecondPage extends StatelessWidget {
+  const SecondPage({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('SecondPage'),
+      ),
+      body: Center(
+        child: ElevatedButton(
+          onPressed: () => Navigator.pop(context),
+          child: const Text('返回'),
         ),
       ),
     );

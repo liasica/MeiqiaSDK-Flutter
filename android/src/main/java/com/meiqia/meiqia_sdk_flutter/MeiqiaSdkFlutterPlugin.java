@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import com.meiqia.core.MQManager;
 import com.meiqia.core.callback.OnInitCallback;
 import com.meiqia.meiqiasdk.activity.MQConversationActivity;
+import com.meiqia.meiqiasdk.callback.MQSimpleActivityLifecyleCallback;
 import com.meiqia.meiqiasdk.callback.OnLinkClickCallback;
 import com.meiqia.meiqiasdk.util.MQConfig;
 import com.meiqia.meiqiasdk.util.MQIntentBuilder;
@@ -38,7 +39,8 @@ public class MeiqiaSdkFlutterPlugin implements FlutterPlugin, MethodCallHandler,
     /// This local reference serves to register the plugin with the Flutter Engine and unregister it
     /// when the Flutter Engine is detached from the Activity
     private MethodChannel channel;
-    private Activity context;
+    private Activity context; // flutter Activity
+    private MQConversationActivity mQConversationActivity;
 
     private HashMap<String, String> clientInfo;
     private boolean updateClientInfo = false;
@@ -72,7 +74,23 @@ public class MeiqiaSdkFlutterPlugin implements FlutterPlugin, MethodCallHandler,
                     result.success(s);
                 }
             });
+        } else if (call.method.equals("dismiss")) {
+            if (mQConversationActivity != null) {
+                mQConversationActivity.finish();
+            }
         } else if (call.method.equals("show")) {
+            MQConfig.setActivityLifecycleCallback(new MQSimpleActivityLifecyleCallback() {
+
+                @Override
+                public void onActivityCreated(MQConversationActivity activity, Bundle savedInstanceState) {
+                    mQConversationActivity = activity;
+                }
+
+                @Override
+                public void onActivityDestroyed(MQConversationActivity activity) {
+                    mQConversationActivity = null;
+                }
+            });
             MQIntentBuilder intentBuilder = new MQIntentBuilder(context);
             if (updateClientInfo) {
                 intentBuilder.updateClientInfo(clientInfo);
