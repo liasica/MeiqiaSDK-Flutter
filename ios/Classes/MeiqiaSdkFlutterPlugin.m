@@ -14,6 +14,7 @@ static NSString *const setPreSendTextMessage = @"setPreSendTextMessage";  //设�
 static NSString *const setPreSendProductCardMessage = @"setPreSendProductCardMessage";  //设置预发送的商品卡片信息
 static NSString *const setOnLinkClickListener = @"setOnLinkClickListener";  //点击商品卡片的回调
 static NSString *const showChatViewController = @"show";  //跳转到聊天页面
+static NSString *const dismissChatViewController = @"dismiss";  //退出聊天页面
 
 #pragma mark - 回调给flutter的方法
 
@@ -124,6 +125,8 @@ static NSString *const kSalesCount = @"salesCount";  // 销售量
         [self handleSetOnLinkClickListener];
     } else if ([method isEqualToString:showChatViewController]) {
         [self showMeiQiaChatView];
+    } else if ([method isEqualToString:dismissChatViewController]) {
+        [self dismissMeiQiaChatView];
     } else {
         result(FlutterMethodNotImplemented);
     }
@@ -166,6 +169,15 @@ static NSString *const kSalesCount = @"salesCount";  // 销售量
     UIViewController *rootController = [[UIApplication sharedApplication] keyWindow].rootViewController;
     [self.chatViewManager presentMQChatViewControllerInViewController:rootController];
     self.chatViewManager = nil;
+}
+
+/**
+ *  退出聊天页面
+ *
+ */
+- (void)dismissMeiQiaChatView {
+    UIViewController *rootController = [[UIApplication sharedApplication] keyWindow].rootViewController;
+    [rootController dismissViewControllerAnimated:NO completion:nil];
 }
 
 /**

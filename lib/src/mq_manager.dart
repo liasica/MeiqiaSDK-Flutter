@@ -69,6 +69,10 @@ class MQManager {
     }
     _channel.invokeMethod('show');
   }
+
+  dismiss() {
+    _channel.invokeMethod('dismiss');
+  }
 }
 
 class ClientInfo {
