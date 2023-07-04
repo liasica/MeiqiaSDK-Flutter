@@ -144,6 +144,7 @@ static NSString *const kSalesCount = @"salesCount";  // 销售量
     [MQManager initWithAppkey:appKey completion:^(NSString *clientId, NSError *error) {
         if (!error) {
             result(nil);
+            [[UIApplication sharedApplication] registerForRemoteNotifications];
         } else {
             result(error.description);
         }
@@ -362,7 +363,6 @@ static NSString *const kSalesCount = @"salesCount";  // 销售量
             //远程通知注册失败error
         }
     }];
-    [application registerForRemoteNotifications];
 }
 
 
