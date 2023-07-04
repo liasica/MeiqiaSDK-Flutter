@@ -1,4 +1,5 @@
 #import "MeiqiaSdkFlutterPlugin.h"
+#import <UserNotifications/UserNotifications.h>
 #import <MeiQiaSDK/MQManager.h>
 #import "MQChatViewManager.h"
 
@@ -345,21 +346,23 @@ static NSString *const kSalesCount = @"salesCount";  // 销售量
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
     //推送注册
-#if __IPHONE_OS_VERSION_MIN_REQUIRED >= 80000
-    UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeAlert
-                                            | UIUserNotificationTypeBadge
-                                            | UIUserNotificationTypeSound
-                                                                             categories:nil];
-    [application registerUserNotificationSettings:settings];
-    [application registerForRemoteNotifications];
-#else
-    [application registerForRemoteNotificationTypes:
-     UIRemoteNotificationTypeBadge |
-     UIRemoteNotificationTypeAlert |
-     UIRemoteNotificationTypeSound];
-#endif
+    [self requestAuthorizeation:application];
     
     return YES;
+}
+
+//MARK:注册远程推送通知
+- (void)requestAuthorizeation:(UIApplication *)application {
+    UNUserNotificationCenter *notificationCenter = [UNUserNotificationCenter currentNotificationCenter];
+    notificationCenter.delegate = self;
+    [notificationCenter requestAuthorizationWithOptions:UNAuthorizationOptionAlert | UNAuthorizationOptionBadge | UNAuthorizationOptionSound completionHandler:^(BOOL granted, NSError * _Nullable error) {
+        if (!error && granted) {
+            //远程通知注册成功
+        } else {
+            //远程通知注册失败error
+        }
+    }];
+    [application registerForRemoteNotifications];
 }
 
 
