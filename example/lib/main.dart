@@ -123,6 +123,7 @@ class _MyAppState extends State<MyApp> {
       navBarTitleTxtColor: '#ffffff', // 设置导航栏上的 title 的颜色
       enableShowClientAvatar: false, // 是否支持当前用户头像的显示
       enableSendVoiceMessage: true, // 是否支持发送语音消息
+      enablePhotoLibraryEdit: false, // 是否支持相册选择图片可裁剪。默认支持裁剪
     );
     MQManager.instance.show(style: style);
   }

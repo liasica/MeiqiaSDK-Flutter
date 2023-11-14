@@ -51,6 +51,8 @@ static NSString *const kEnableOutgoingAvatar = @"enableShowClientAvatar";  // �
 
 static NSString *const kEnableSendVoiceMessage= @"enableSendVoiceMessage";  // 是否支持发送语音
 
+static NSString *const kEnablePhotoLibraryEdit= @"enablePhotoLibraryEdit";  // 是否支持相册选择图片可裁剪。默认支持裁剪
+
 #pragma mark - 商品卡片参数key
 
 static NSString *const kPictureUrl = @"pictureUrl";  //商品图片的url
@@ -240,6 +242,10 @@ static NSString *const kSalesCount = @"salesCount";  // 销售量
         
         if ([styleDic objectForKey:kEnableSendVoiceMessage] != nil && ![[styleDic objectForKey:kEnableSendVoiceMessage] isEqual:[NSNull null]]) {
             [self.chatViewManager enableSendVoiceMessage:[[styleDic objectForKey:kEnableSendVoiceMessage] boolValue]];
+        }
+
+        if ([styleDic objectForKey:kEnablePhotoLibraryEdit] != nil && ![[styleDic objectForKey:kEnablePhotoLibraryEdit] isEqual:[NSNull null]]) {
+            [self.chatViewManager enablePhotoLibraryEdit:[[styleDic objectForKey:kEnablePhotoLibraryEdit] boolValue]];
         }
     }
 }
