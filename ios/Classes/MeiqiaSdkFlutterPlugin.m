@@ -352,8 +352,8 @@ static NSString *const kSalesCount = @"salesCount";  // 销售量
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
-    //推送注册
-    [self requestAuthorizeation:application];
+    // 推送注册
+    // [self requestAuthorizeation:application];
     
     return YES;
 }
